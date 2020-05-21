@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{minted}
+\usepackage{physics}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{parskip}
+\usepackage{url}
+\usepackage[T1]{fontenc}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage[nottoc,numbib]{tocbibind}
+%\bibpunct{(}{)}{;}{a}{}{,} 
+
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=blue,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+
+
+\title{\textbf{Literature Review Notes}}
+\author{Rylan Jardine (28749146)}
+\date{\today}
+\begin{document}
+
+\maketitle
+\section{Introduction}
+
+
+
+\section{A new general relativistic magnetohydrodynamics code for dynamical spacetimes}
+
+\cite{newmhd}
+
+For the rotational collapse of massive stellar cores the magnetic field is assumed to grow via extraction of energy from differential rotation generated during core collapse. 
+
+SRMHD codes have historically assumed ideal MHD where fluid is assumed to be a perfect conductor. In which case fluid equations are significantly simplififed and solved using numeric codes designed specifically for hyperbolic systems. These codes include Godunov type schemes numerical techniques that aim to keep the magnetic field divergence free 
+
+\section{A five-wave Harten--Lax--van Leer Riemann solver for relativistic magnetohydrodynamics}
+
+ \cite{5waverel}
+ 
+ \subsection{abstract}
+
+Special relativistic MHD 5 wave HLL Riemann solver only
+
+Solution to the Riemann problem is approximated by a five wave pattern comprising a contact surface in the middle of two rotational discontinuities and two outermost fast shocks. 
+
+The scheme is far more elaborate than the classical MHD case since the normal velocity is no longer constant across rotational modes. 
+
+Can still satisfy the Rankine-Hugoniot jump conditions which can be obtained by solving a non-linear scalar equation in the total pressure variable which is constant over the whole Riemann fan.
+
+Accuracy of the Riemann solver is validated via a series of tests over one and multiple dimension applications. 
+
+\hl{It is found that the new solver is considerably improved in comparison to the popular HLL solver and other recently proposed HLLC schemes}
+
+\subsection{Motivation}
+
+Relativistic flows are found in many astrophysical phenomena, (e.g. pulsar winds, accretion flows, gamma ray bursts) also imperative to analyse this behaviour is to include the behaviour of highly magnetic fields present. 
+
+The high degree of non-linearity means the RMHD equations cannot be solved analytically and instead require numerical approaches e.g. via Godunov-type schemes due to their ability to to accurately describe sharp flow discontinuities e.g shocks or tangential waves. 
+
+The fundamental ingredients of such a scheme include their exact or approimate solution to the Riemann Problem (i.e. the decay between two constant states separated by a discontinuity).
+
+However, exact solutions to the exact Riemann problem (especially in relativistic multi-D MHD) are prohibitively expensive to find due to the high degree of non-linearity present in the equations. Thus approximate solutions are preferred. 
+
+Linearised solvers rely on eigenvector decomposition (a rather convoluted method leading to numerical abnormalities which can lead to negative densities or pressures in a solution)
+
+Characteristic free algorithms (e.g. HLL or Rusanov Lax-Friederichs) have the advantage of ease of implementation and positivity properties (presumably density and pressure are positive definite?) However, the HLL scheme is often too simple approximating the 7 waves (1 contact discontinuity, 2 fast, 2 slow, 2 Alfven?) as only 2 by collapsing the full structure of the Riemann fan into a single average state. Thus such solvers can't resolve intermediate waves such as contact, slow and Alfevn discontinuities. The middle contact (or entropy wave, I assume this is the contact discontinuity). HLLC schemes from certain works have attempted to resolve the middle contact discontinuity. However, the HLLC solvers still do not capture slow and Alven wave discontinuities. Furthermore application of HLLC to 3D problems can was shown by MB to suffer an abnormal/unfortunate singularity when the component of the magnetic field normal to a zone interface approaches zero. 
+
+(Note MB and 
+
+A step forward in solving intermediate wave structures was achieved
+
+\bibliographystyle{unsrt}
+
+\bibliography{bib.bib}
+
+
+\end{document}
