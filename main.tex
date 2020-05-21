@@ -80,9 +80,13 @@ Linearised solvers rely on eigenvector decomposition (a rather convoluted method
 
 Characteristic free algorithms (e.g. HLL or Rusanov Lax-Friederichs) have the advantage of ease of implementation and positivity properties (presumably density and pressure are positive definite?) However, the HLL scheme is often too simple approximating the 7 waves (1 contact discontinuity, 2 fast, 2 slow, 2 Alfven?) as only 2 by collapsing the full structure of the Riemann fan into a single average state. Thus such solvers can't resolve intermediate waves such as contact, slow and Alfevn discontinuities. The middle contact (or entropy wave, I assume this is the contact discontinuity). HLLC schemes from certain works have attempted to resolve the middle contact discontinuity. However, the HLLC solvers still do not capture slow and Alven wave discontinuities. Furthermore application of HLLC to 3D problems can was shown by MB to suffer an abnormal/unfortunate singularity when the component of the magnetic field normal to a zone interface approaches zero. 
 
-(Note MB and 
+(Note MB and MK are papers/authors that pioneered some of these tools) 
 
-A step forward in solving intermediate wave structures was achieved
+A step forward in solving intermediate wave structures was achieved by MK who introduced a four state solver (HLLD) which restores the rotational (Alfven) discontinuities. This paper provides a generalisation of this HLLD scheme in RMHD. However, it is complicated by the differing nature of relativistic rotational waves across which the velocity component normal to the interface is no longer constant. This algorithm is implemented in the PLUTO code, using the finite volume formalism. 
+
+\subsection{Basic equations}
+
+Equations of RMHD are derived under the physical assumptions of constant magnetic permeability $(\mu=const)$ and infinite conductivity ($\sigma=\infty$)
 
 \bibliographystyle{unsrt}
 
