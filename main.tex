@@ -38,6 +38,40 @@
 \maketitle
 \section{Introduction}
 
+\section{IDEAS FOR MINDMAP}
+
+
+\subsection{TITLE}
+
+e.g. Effects of MHD on gravitational Wave signal 
+
+OR along those lines considering the emphasis of my project will be on these aspects particularly (only getting to GR component later on)
+
+
+\subsection{Chapter 1 (Introduction to Supernovae problem in general)}
+
+Introducing supernova physics as a whole, i.e. what are the major problems in the field (make it really short as relevance is questionable) how are these tackled broadly what issues are at play in modelling these cases e.g. computational cost etc.., what can be gained by looking at supernova what do they mean what are they? etc...
+
+\subsection{chapter 2 - More on gravitational wave physics}
+
+Exploring how supernovae actually produce gravitational waves e.g. in what phases of explosion are these actually produced in etc.. what are the mechanisms what are the frequencies detected as.. durations? etc.. what is the signal like, how could it be detected from earth...? Could there be observations of these to compare with model predictions? key parameters to determine frequency and amplitudes and how they are altered by rotation and magnetic field. 
+
+(maths of amplitude and frequency calculations) 
+
+
+\subsection{Chapter 3 - simulating supernovae in 2D with MHD}
+
+How is this done in multi-D simulations with specific emphasis on MHD what are the equations of Newtonian hydrodynamics?  How are they solved in a multi-D case? How are they solved in general? What do we find when we solve them? What is their impact on GW signals (maybe previous chapter?)
+
+\subsection{Chapter - 4 GR simulations of supernovae in MHD multi-D}
+
+If we were to extend the model to GR how does it work? What do our equations become and how would this be implemented? what kind of results are we expecting to see? how does a relativistic extension impact the existing newtonian GW signal predictions/findings. 
+
+
+
+
+
+
 
 
 \section{A new general relativistic magnetohydrodynamics code for dynamical spacetimes}
@@ -86,7 +120,75 @@ A step forward in solving intermediate wave structures was achieved by MK who in
 
 \subsection{Basic equations}
 
-Equations of RMHD are derived under the physical assumptions of constant magnetic permeability $(\mu=const)$ and infinite conductivity ($\sigma=\infty$)
+Equations of RMHD are derived under the physical assumptions of constant magnetic permeability $(\mu=const)$ and infinite conductivity ($\sigma=\infty$), appropriate for a perfectly conducting fluid. In divergence form they express particle number and energy-momentum conservation. With covariant magnetic field orthogonal to the fluid four velocity. 
+
+1D conservation law:
+
+\begin{align}
+    \pdv{\mathbf{U}}{t}+\pdv{\mathbf{F}}{x}=0
+\end{align}
+
+With $\mathbf{U}$ the state vector composed of conserved quantities and $\mathbf{F}$ the corresponding fluxes. 
+
+We see the same Riemann fan in RMHD as in classical MHD (i.e. two outward fast waves then the two alfven, two slow and finally a contact discontinuity). 
+
+Fast and slow magneto-sonic waves can be either shocks or rarefaction depending upon the pressure jump and the norm of the magnetic field. All variables including density, velocity, magnetic field and pressure, change discontinuously across a fast or slow shock. Whereas, the thermodynamic quantities such as thermal pressure and rest density remain continuous when crossing a relativistic Alfven wave. Contrary to the classical case the tangential components of magnetic fields trace ellipses instead of circles and the normal component of velocity is no longer continuous across a rotational discontinuity. In the contact discontinuity only density exhibits a jump, whilst thermal pressure, velocity and magnetic field remain continuous. 
+
+
+\subsection{Summary}
+
+This paper explores a new Five-Wave HLL Riemann Solver for Relativistic MHD. It explores a relativistic extension to the Newtonian five-wave HLLD solver by Miyoshi and Kusano (2005) (referred to as MK). It is a five wave Riemann solver for the equations of ideal relativistic MHD.
+
+In modern astrophysics relativistic flows are a major component of high energy astrophysical phenomena under investigation e.g. jets in extragalactic radio sources, accretion flows around compact objects, pulsar winds and gamma ray bursts. In such cases the presence of a magnetic field is also essential in shaping the evolution and dynamics of such fluids. Thus in order to understand these relativistic phenomena and their associated physics and observational appearance, one must look to the RMHD (relativistic magneto-hydrodynamics) equations. However, due to the high degree of non-linearity and overall complexity in these equations, they are near impossible to solve analytically and must instead be solved numerically. 
+
+In the search for efficient and accurate numerical formulations. Often Godunov type schemes will be employed to solve such problems due to their ability and robustness to accurately describe sharp flow discontinuities like shocks or tangent waves.  
+
+A fundamental ingredient to such a routine is an exact or approximate solution to the Riemann problem. \hl{The Riemann problem is the decay between two constant states which are separated by a discontinuity. It is an important issue that must be overcome and solved in order to numerically model a system, however, the use of an exact solution is often (especially in the RMHD case) prohibitively expensive due to the high computational cost associated with solving non-linearities which are present in the equations themselves. }
+
+This Riemann solver must solve the equations of RMHD. However, these must be solved numerically due to the high degree of non-linearity making an analytic solution incredibly difficult to find. Thus approximate methods are preferred. Linearised solvers which exist rely on the convoluted eigenvector decomposition of the underlying equations and can be prone to numerical abnormalities which lead to negative density or pressures inside the solution. Characteristic free algorithms based on either the Rusanov Lax-friederichs or Harten-Lax-van Leer (HLL) (formulations are often preferred due to their ease of implementation and positivity properties. 
+
+Although a simpler scheme, the HLL scheme approximates only two out of the seven waves by collapsing the entire Riemann fan into a single average state. Such solvers are not able to resolve intermediate waves such as Alven, contact and slow discontinuities. A new scheme HLLC has thus been devised to restore the middle contact (or entropy) wave. by Mignone et al (2005) (MB). However, such schemes still do not capture the slow and Alfven discontinuities. (Also application of the HLLC scheme to 3D problems was shown to suffer from an abnormal singularity when the component of the magnetic field normal to an interface approaches zero. 
+
+In the case of Newtonian MHD a four state solver (HLLD) was proposed by MK to restore the rotational (Alfven) discontinuities. This paper generalises this approach to the equations of RMHD. Thus, the solution to the Riemann problem itself is characterised by a five wave pattern comprised of two outermost fast shocks, two rotational discontinuities and a contact surface in the middle. However, it is also worth noting that this proposed scheme is far more elaborate than in the classical case since the normal velocity is no longer constant across the rotational modes. But the Rankine-Huginot jump conditions can still be obeyed via solving a non-linear scalar equation in the total pressure variable which for the given configuration is constant over the whole Riemann fan. 
+
+The proposed algorithm is implemented in the PLUTO code for astrophysical fluid dynamics, which computationally provides solutions for different sets of equations (e.g. Euler, MHD, RHMD conservation laws) in the finite volume formalism. 
+
+Basically they solve the conservation law (this is a 1D version):
+
+\begin{align}
+    \pdv{\mathbf{U}}{t}+\pdv{\mathbf{F}}{x}=0
+\end{align}
+
+They do this via a conservative discretisation of the form:
+
+\begin{align}
+    \mathbf{U}_i^{n+1}=\mathbf{U}_i^{n}-\frac{\Delta t}{ \Delta x}(f_{i+\frac{1}{2}}-f_{i-\frac{1}{2}})
+\end{align}
+
+Solving the initial value problem:
+
+$$
+\mathbf{U}(x,t^n)=\left\{\begin{array}{ll}
+\mathbf{U}_L & \text{for} \ x<x_i+\frac{1}{2} \\
+\mathbf{U}_R & \text{for} \ x>x_i+\frac{1}{2}
+\end{array}\right.
+$$
+
+Where for a first order scheme $\mathbf{U}_L=\mathbf{U}_i$ and $\mathbf{U}_R=\mathbf{U}_{i+1}$. For the case of magnetic field normal to the field vanishing a degeneracy occurs ads the tangential, Alfven and slow waves all propagate at the speed of the fluid and a 3 wvae pattern emerges instead. 
+
+The assumption is made that Riemann fan is divided into 5 waves, for which individual jump conditions (for all discontinuities) are derived (See paper for more). It is shown that these can all be reduced down to the solution of a single non-linear equation, in the total pressure variable p (which can be solved exactly only when the normal component of the magnetic field is zero). 
+
+For the general case they use an initial guess (p(0)) to calculate various parameters and solve the single non-linear equation to find the next improved iteration value. Where the initial condition is determined to be the solution to p when bx=0 otherwise the initial state is calculated from the HLL average states. Usually this is close enough to the physical solution (often within a relative accuracy of $10^{-6}$ within 5 or 6 iterations. In general the computational cost was found in general across a variety of 1D shock tube problems and multi-D problems to not exceed a factor of 2 more than that of a simple HLL scheme. 
+
+However, also it was found that in around 0.1\% of cases that none of the zeroes found in the non-linear equation were physically admissible. They get around this by using the simple HLL scheme in these cases. One suggestion to get around this was confine the solution to a given interval and then use a specific root finder to determine that amount. 
+
+Basically the main result is that in all tests it was found that in all cases the HLLD scheme was far more accurate and lead to better resolved and sharper discontinuities more closely matching the exact solution than for HLL or HLLC whilst only taking a maximum twice as long. 
+
+\subsection{Other Notes}
+
+In the case of RMHD 
+
+In the fast and slow shocks all parameters experience a jump/discontinuity. In the contact mode only density exhibits a jump whilst all other parameters are continuous. Finally thermodynamic/scalar quantities remain continuous across an Alfven wave whilst all vector quantities experience a jump since contrary to its classical counterpart the tangential components of magnetic field trace ellipses instead of circles and the normal component of velocity is no longer continuous across a rotational discontinuity. 
 
 \bibliographystyle{unsrt}
 
